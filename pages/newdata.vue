@@ -12,26 +12,41 @@
 
 <script>
 import firebase from "@/plugins/firebase";
-var item;
-var num;
-var plc;
+var rankCount = 1;
+var database = firebase.database();
+var obj;
 
 export default {
   data() {
-    return { item, num, plc };
+    return { item: null, num: null, plc: null, obj };
+  },
+  created: function() {
+    firebase
+      .database()
+      .ref("mybest/ranking/" + this.$store.state.user.uid)
+      .once("value")
+      .then(result => {
+        if (result.val()) {
+          obj = result.val();
+        }
+        rankCount = Object.keys(obj).length + 1;
+      });
   },
   methods: {
     add() {
-      var database = firebase.database();
-      firebase
-        .database()
-        .ref("mybest/ranking/1")
+      database
+        .ref("mybest/ranking/" + this.$store.state.user.uid + "/" + rankCount)
         .set({
+          id: String(rankCount),
           item: this.item || " ",
           scr: this.num || 0,
           plc: this.plc || " "
         });
-      console.log("add");
+      alert("登録完了");
+      rankCount++;
+      this.item = "";
+      this.num = "";
+      this.plc = "";
     }
   }
 };
