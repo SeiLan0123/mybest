@@ -3,22 +3,21 @@
     <h1>新しいデータを追加しよう</h1>
     <nuxt-link to="/">ランキングに戻る</nuxt-link>
     <p>品目<input type="text" v-model="item"></p>
-    <p>点数<input type="number" v-model="num"></p>
     <p>店名<input type="text" v-model="plc"></p>
-    <button @click="add(item, num, plc)">追加</button>
+    <button @click="add(item, plc)">追加</button>
     </section>
 </template>
 
 
 <script>
 import firebase from "@/plugins/firebase";
-var rankCount = 1;
+var addCount = 0;
 var database = firebase.database();
 var obj;
 
 export default {
   data() {
-    return { item: null, num: null, plc: null, obj };
+    return { item: null, plc: null, obj };
   },
   created: function() {
     firebase
@@ -29,23 +28,29 @@ export default {
         if (result.val()) {
           obj = result.val();
         }
-        rankCount = Object.keys(obj).length + 1;
+        addCount = Object.keys(obj).length + 1;
       });
   },
   methods: {
     add() {
       database
-        .ref("mybest/ranking/" + this.$store.state.user.uid + "/" + rankCount)
+        .ref(
+          "mybest/ranking/" +
+            this.$store.state.user.uid +
+            "/" +
+            String(addCount)
+        )
         .set({
-          id: String(rankCount),
+          //id: String(rankCount),
           item: this.item || " ",
-          scr: this.num || 0,
-          plc: this.plc || " "
+          rank: String(0),
+          plc: this.plc || " ",
+          id: String(addCount)
         });
       alert("登録完了");
-      rankCount++;
+      console.log(addCount);
+      addCount--;
       this.item = "";
-      this.num = "";
       this.plc = "";
     }
   }
