@@ -49,9 +49,14 @@ export default {
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
   display: block;
   font-weight: 300;
-  font-size: 200px;
-  color: #35495e;
+  font-size: 15vw;
+  color: #ffeeee;
   letter-spacing: 1px;
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(#05fbff, #56b949);
 }
 
 .links {

@@ -1,17 +1,51 @@
 <template>
   <section>
-  <h1>This is ranking page</h1>
-  <nuxt-link to="newdata">データを追加する</nuxt-link>
-   {{this.$store.state.user.displayName}}
-   <button @click="apply">ランキングを更新する</button>
+    <v-navigation-drawer></v-navigation-drawer>
+    <v-toolbar color="indigo" dark fixed><v-toolbar-title>my best</v-toolbar-title>
+    <v-btn nuxt to="newdata">データを追加する</v-btn>
+  <v-btn nuxt to="testpage">テストページ</v-btn>
+   <div @click="apply"><v-btn>ランキングを更新する</v-btn></div>
+   <p>{{this.$store.state.user.displayName}}</p></v-toolbar>
+       <v-bottom-nav
+      :active.sync="bottomNav"
+      :value="true"
+      absolute
+      fixed
+      color="transparent"
+    >
+      <v-btn
+        color="teal"
+        flat
+        value="recent"
+      >
+        <span>Recent</span>
+        <v-icon>history</v-icon>
+      </v-btn>
 
+      <v-btn
+        color="teal"
+        flat
+        value="favorites"
+      >
+        <span>Favorites</span>
+        <v-icon>favorite</v-icon>
+      </v-btn>
+
+      <v-btn
+        color="teal"
+        flat
+        value="nearby"
+      >
+        <span>Nearby</span>
+        <v-icon>place</v-icon>
+      </v-btn>
+    </v-bottom-nav>
 <draggable element="ul" class="rankingListDiv" v-model="obj" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="draggingisEnd">
   <transition-group type="transition" :name="'flip'">
-
-  <li v-for="(a, index) in obj " class="rankingList" :key="a.id">{{index + 1}}位<p>{{a.item}}</p><p>{{a.plc}}</p></li>
+  <li v-for="(a, index) in obj " class="rankingList" :key="a.id">{{index + 1}}位<p>{{a.item}}</p><p>{{a.plc}}</p> <img v-show="a.imgPath" :src="getImgurlb(a.imgPath)" class="itemImg"></li>
   </transition-group>
 </draggable>
-{{jsonobj}}
+
   </section>
 </template>
 
@@ -19,9 +53,11 @@
 <script>
 import firebase from "@/plugins/firebase";
 import draggable from "vuedraggable";
+import "vuetify/dist/vuetify.min.css";
 
 var dragging;
 var database = firebase.database();
+var imgPathObj;
 
 export default {
   components: {
@@ -29,7 +65,7 @@ export default {
   },
 
   data(context) {
-    return { obj: [] };
+    return { obj: [], imgURL: {}, bottomNav: "recent" };
   },
   created: function() {
     database
@@ -47,9 +83,99 @@ export default {
               return a.rank - b.rank;
             });
         }
+        this.obj.forEach(s => {
+          if (s.imgPath) {
+            console.log("img path is alive");
+            imgPathObj = firebase
+              .storage()
+              .ref()
+              .child(s.imgPath);
+            imgPathObj
+              .getDownloadURL()
+              .then(url => {
+                var path = s.imgPath;
+                this.$set(this.imgURL, path, url);
+                //              this.imgURL[path] = url;
+              })
+              .catch(function(error) {
+                console.log(error);
+                switch (error.code) {
+                  case "storage/object-not-found":
+                    console.log("File doesn't exist");
+                    break;
+
+                  case "storage/unauthorized":
+                    console.log(
+                      "User doesn't have permission to access the object"
+                    );
+                    break;
+
+                  case "storage/canceled":
+                    console.log("User canceled the upload");
+                    break;
+
+                  case "storage/unknown":
+                    console.log(
+                      "Unknown error occurred, inspect the server response"
+                    );
+                    break;
+                }
+              });
+          }
+        });
       });
   },
+  mounted: function() {
+    console.log("obj is " + this.obj);
+    console.log("mounted");
+  },
   methods: {
+    getImgurlb(imgPath) {
+      console.log(this.imgURL);
+      console.log(this.imgURL[imgPath]);
+      return this.imgURL[imgPath];
+    },
+    getImgurl(imgPath) {
+      if (imgPath) {
+        var imgPathUrl;
+        console.log(imgPath);
+        var imgPathObj = firebase
+          .storage()
+          .ref()
+          .child(imgPath);
+        imgPathObj
+          .getDownloadURL()
+          .then(url => {
+            console.log(url);
+            imgPathUrl = url;
+          })
+          .catch(function(error) {
+            console.log(error);
+            switch (error.code) {
+              case "storage/object-not-found":
+                console.log("File doesn't exist");
+                break;
+
+              case "storage/unauthorized":
+                console.log(
+                  "User doesn't have permission to access the object"
+                );
+                break;
+
+              case "storage/canceled":
+                console.log("User canceled the upload");
+                break;
+
+              case "storage/unknown":
+                console.log(
+                  "Unknown error occurred, inspect the server response"
+                );
+                break;
+            }
+          });
+        return imgPathUrl;
+      }
+    },
     draggingisEnd() {
       this.isDragging = true;
       for (var i = 0; i < Object.keys(this.obj).length; i++) {
@@ -144,12 +270,18 @@ export default {
 <style>
 .rankingList {
   width: 20vw;
+  height: 5vw;
   margin: 0 auto;
   font-size: 10pt;
   box-shadow: 0px 0px 7px 0px #45dbfc;
   border: 2px solid #cccccc;
+  background-color: #fff;
 }
 ul {
+  height: 100vh;
+  overflow: auto;
+  margin-top: 80px;
+  margin-bottom: 80px;
   list-style: none;
 }
 
@@ -159,5 +291,15 @@ ul {
 
 .sortable-drag {
   font-size: 15pt;
+}
+
+img.itemImg {
+  margin: auto;
+  width: 5vw;
+  height: 5vw;
+}
+
+html {
+  overflow: hidden;
 }
 </style>

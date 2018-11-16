@@ -4,7 +4,9 @@
     <nuxt-link to="/">ランキングに戻る</nuxt-link>
     <p>品目<input type="text" v-model="item"></p>
     <p>店名<input type="text" v-model="plc"></p>
-    <button @click="add(item, plc)">追加</button>
+    <button @click="add()">追加</button>
+    <input type="file" class="file" @change="picUpload">
+    <img v-show="uploadFile" :src="uploadFile" class="itemImage">
     </section>
 </template>
 
@@ -17,7 +19,14 @@ var obj;
 
 export default {
   data() {
-    return { item: null, plc: null, obj };
+    return {
+      item: null,
+      plc: null,
+      obj: [],
+      uploadFile: "",
+      uploadFileData: "",
+      imgPath: ""
+    };
   },
   created: function() {
     firebase
@@ -27,12 +36,66 @@ export default {
       .then(result => {
         if (result.val()) {
           obj = result.val();
+          addCount = Object.keys(obj).length + 1;
         }
-        addCount = Object.keys(obj).length + 1;
       });
   },
   methods: {
+    //データベースに追加
     add() {
+      var metadata = {
+        contentType: this.uploadFileData.type
+      };
+      console.log(this.uploadFileData);
+      var storageRef = firebase.storage().ref();
+      var uploadTask = storageRef
+        .child(
+          "mybest/" +
+            this.$store.state.user.uid +
+            "/" +
+            this.uploadFileData.name
+        )
+        .put(this.uploadFileData, metadata);
+      uploadTask.on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        function(snapshot) {
+          var progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED:
+              console.log("Upload is paused");
+              break;
+            case firebase.storage.TaskState.RUNNING:
+              console.log("Upload is running");
+              break;
+          }
+        },
+        function(error) {
+          switch (error.code) {
+            case "storage/unauthorized":
+              console.log("User doesn't have permission to access the object");
+              break;
+
+            case "storage/canceled":
+              console.log("User canceled the upload");
+              break;
+
+            case "storage/unknown":
+              console.log(
+                "Unknown error occurred, inspect error.serverResponse"
+              );
+              break;
+          }
+        },
+        function() {
+          // Upload completed successfully, now we can get the download URL
+          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log("File available at", downloadURL);
+          });
+        }
+      );
+
       database
         .ref(
           "mybest/ranking/" +
@@ -45,13 +108,29 @@ export default {
           item: this.item || " ",
           rank: String(0),
           plc: this.plc || " ",
-          id: String(addCount)
+          id: String(addCount),
+          imgPath: this.imgPath || ""
         });
       alert("登録完了");
       console.log(addCount);
-      addCount--;
+      addCount++;
       this.item = "";
       this.plc = "";
+    },
+    picUpload(e) {
+      e.preventDefault();
+      let files = e.target.files;
+      this.uploadFile = files[0];
+      console.log(this.uploadFile);
+      this.uploadFileData = this.uploadFile;
+      let reader = new FileReader();
+      reader.onload = e => {
+        this.uploadFile = e.target.result;
+      };
+      this.imgPath =
+        "mybest/" + this.$store.state.user.uid + "/" + this.uploadFileData.name;
+
+      reader.readAsDataURL(this.uploadFile);
     }
   }
 };

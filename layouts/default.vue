@@ -31,7 +31,7 @@ html {
   color: #3b8070;
   text-decoration: none;
   padding: 30px 90px;
-  font-size: 50px;
+  font-size: 10vw;
 }
 
 .button--green:hover {
