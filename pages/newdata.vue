@@ -1,12 +1,20 @@
 <template>
   <section>
-    <h1>新しいデータを追加しよう</h1>
-    <nuxt-link to="/">ランキングに戻る</nuxt-link>
-    <p>品目<input type="text" v-model="item"></p>
-    <p>店名<input type="text" v-model="plc"></p>
-    <button @click="add()">追加</button>
+    <div class="addform">
+    <v-text-field
+    v-model="item"
+    label="品目"
+    required
+    ></v-text-field>
+    <v-text-field
+    v-model="plc"
+    label="店名"
+    required
+    ></v-text-field>
+    <v-btn @click="add()">追加</v-btn>
     <input type="file" class="file" @change="picUpload">
-    <img v-show="uploadFile" :src="uploadFile" class="itemImage">
+    <p><img v-show="uploadFile" style="width: 50vw" :src="uploadFile" class="itemImage"></p>
+    </div>
     </section>
 </template>
 
@@ -48,54 +56,60 @@ export default {
       };
       console.log(this.uploadFileData);
       var storageRef = firebase.storage().ref();
-      var uploadTask = storageRef
-        .child(
-          "mybest/" +
-            this.$store.state.user.uid +
-            "/" +
-            this.uploadFileData.name
-        )
-        .put(this.uploadFileData, metadata);
-      uploadTask.on(
-        firebase.storage.TaskEvent.STATE_CHANGED,
-        function(snapshot) {
-          var progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case firebase.storage.TaskState.PAUSED:
-              console.log("Upload is paused");
-              break;
-            case firebase.storage.TaskState.RUNNING:
-              console.log("Upload is running");
-              break;
+      if (this.uploadFileData) {
+        var uploadTask = storageRef
+          .child(
+            "mybest/" +
+              this.$store.state.user.uid +
+              "/" +
+              this.uploadFileData.name
+          )
+          .put(this.uploadFileData, metadata);
+
+        uploadTask.on(
+          firebase.storage.TaskEvent.STATE_CHANGED,
+          function(snapshot) {
+            var progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED:
+                console.log("Upload is paused");
+                break;
+              case firebase.storage.TaskState.RUNNING:
+                console.log("Upload is running");
+                break;
+            }
+          },
+          function(error) {
+            switch (error.code) {
+              case "storage/unauthorized":
+                console.log(
+                  "User doesn't have permission to access the object"
+                );
+                break;
+
+              case "storage/canceled":
+                console.log("User canceled the upload");
+                break;
+
+              case "storage/unknown":
+                console.log(
+                  "Unknown error occurred, inspect error.serverResponse"
+                );
+                break;
+            }
+          },
+          function() {
+            // Upload completed successfully, now we can get the download URL
+            uploadTask.snapshot.ref
+              .getDownloadURL()
+              .then(function(downloadURL) {
+                console.log("File available at", downloadURL);
+              });
           }
-        },
-        function(error) {
-          switch (error.code) {
-            case "storage/unauthorized":
-              console.log("User doesn't have permission to access the object");
-              break;
-
-            case "storage/canceled":
-              console.log("User canceled the upload");
-              break;
-
-            case "storage/unknown":
-              console.log(
-                "Unknown error occurred, inspect error.serverResponse"
-              );
-              break;
-          }
-        },
-        function() {
-          // Upload completed successfully, now we can get the download URL
-          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            console.log("File available at", downloadURL);
-          });
-        }
-      );
-
+        );
+      }
       database
         .ref(
           "mybest/ranking/" +
@@ -135,3 +149,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.addform {
+  margin-top: 70px;
+}
+</style>

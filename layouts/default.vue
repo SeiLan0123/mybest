@@ -1,8 +1,55 @@
 <template>
   <div>
     <nuxt/>
+    <v-bottom-nav
+      :active.sync="bottomNav"
+      :value="true"
+      absolute
+      fixed
+      color="transparent"
+    >
+      <v-btn
+        color="teal"
+        flat
+        value="ranking"
+        nuxt
+        to="/"
+      >
+        <span>Ranking</span>
+        <v-icon>format_list_numbered</v-icon>
+      </v-btn>
+
+      <v-btn
+        color="teal"
+        flat
+        value="favorites"
+      >
+        <span>Favorites</span>
+        <v-icon>favorite</v-icon>
+      </v-btn>
+
+      <v-btn
+        color="teal"
+        flat
+        value="add"
+        nuxt
+        to="newdata"
+      >
+        <span>New</span>
+        <v-icon>add_circle_outline</v-icon>
+      </v-btn>
+    </v-bottom-nav>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return { bottomNav: "ranking" };
+  }
+};
+</script>
+
 
 <style>
 html {

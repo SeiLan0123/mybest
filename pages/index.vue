@@ -1,50 +1,44 @@
 <template>
   <section>
+
     <v-navigation-drawer></v-navigation-drawer>
     <v-toolbar color="indigo" dark fixed><v-toolbar-title>my best</v-toolbar-title>
-    <v-btn nuxt to="newdata">データを追加する</v-btn>
+    <v-spacer></v-spacer>
   <v-btn nuxt to="testpage">テストページ</v-btn>
-   <div @click="apply"><v-btn>ランキングを更新する</v-btn></div>
+   <v-spacer></v-spacer>
    <p>{{this.$store.state.user.displayName}}</p></v-toolbar>
-       <v-bottom-nav
-      :active.sync="bottomNav"
-      :value="true"
-      absolute
-      fixed
-      color="transparent"
-    >
-      <v-btn
-        color="teal"
-        flat
-        value="recent"
-      >
-        <span>Recent</span>
-        <v-icon>history</v-icon>
-      </v-btn>
 
-      <v-btn
-        color="teal"
-        flat
-        value="favorites"
-      >
-        <span>Favorites</span>
-        <v-icon>favorite</v-icon>
-      </v-btn>
-
-      <v-btn
-        color="teal"
-        flat
-        value="nearby"
-      >
-        <span>Nearby</span>
-        <v-icon>place</v-icon>
-      </v-btn>
-    </v-bottom-nav>
-<draggable element="ul" class="rankingListDiv" v-model="obj" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="draggingisEnd">
+<draggable element="ul" class="rankingListDiv" v-model="obj" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="draggingisEnd" @update="draggingUpdate">
   <transition-group type="transition" :name="'flip'">
-  <li v-for="(a, index) in obj " class="rankingList" :key="a.id">{{index + 1}}位<p>{{a.item}}</p><p>{{a.plc}}</p> <img v-show="a.imgPath" :src="getImgurlb(a.imgPath)" class="itemImg"></li>
+  <li v-for="(a, index) in obj " class="rankingList" :key="a.id">
+     <v-flex xs12>
+            <v-card color="indigo" class="white--text">
+              <v-layout row>
+                <v-flex xs7>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline">{{index + 1}}位</div>
+                      <div>{{a.item}}</div>
+                      <div>{{a.plc}}</div>
+                    </div>
+                  </v-card-title>
+                </v-flex>
+                <v-flex xs5>
+                  <v-img
+                    v-show="a.imgPath"
+                    :src="getImgurlb(a.imgPath)"
+                    height="100px"
+                    contain
+                  ></v-img>
+                </v-flex>
+              </v-layout>
+              <v-divider light></v-divider>
+            </v-card>
+          </v-flex>
+  </li>
   </transition-group>
 </draggable>
+
 
   </section>
 </template>
@@ -182,11 +176,11 @@ export default {
         this.obj[i].rank = String(i + 1);
       }
     },
-    apply() {
+    draggingUpdate() {
       database
         .ref("mybest/ranking/" + this.$store.state.user.uid)
         .set(this.obj);
-      alert("更新完了");
+      console.log("更新完了");
     },
     onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element;
@@ -269,19 +263,16 @@ export default {
 
 <style>
 .rankingList {
-  width: 20vw;
-  height: 5vw;
-  margin: 0 auto;
+  width: 220px;
+  left: auto;
   font-size: 10pt;
-  box-shadow: 0px 0px 7px 0px #45dbfc;
-  border: 2px solid #cccccc;
   background-color: #fff;
 }
-ul {
-  height: 100vh;
-  overflow: auto;
-  margin-top: 80px;
-  margin-bottom: 80px;
+ul.rankingListDiv {
+  height: calc(100vh - 70px - 70px);
+  overflow: scroll;
+  margin-top: 70px;
+  margin-bottom: 0px;
   list-style: none;
 }
 
@@ -301,5 +292,9 @@ img.itemImg {
 
 html {
   overflow: hidden;
+}
+
+body {
+  background: none;
 }
 </style>
