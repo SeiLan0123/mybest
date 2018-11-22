@@ -25,7 +25,7 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
-  loading: { color: '#3B8070' },
+  loading: '~/components/loading.vue',
   /*
   ** Build configuration
   */
@@ -45,7 +45,7 @@ module.exports = {
       config.devtool = "eval-source-map"
     }
   },
-  router: {
-    middleware: 'authenticated'
-  }
+  // router: {
+  //   middleware: 'authenticated'
+  // }
 }

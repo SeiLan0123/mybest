@@ -3,6 +3,12 @@
     <input type="file" class="file" @change="picUpload">
     <img v-show="uploadFile" :src="uploadFile" class="itemImage">
     <img v-show="imgPath" :src="imgPath" class="itemImage">
+    <v-progress-circular
+      :size="70"
+      :width="7"
+      color="purple"
+      indeterminate
+    ></v-progress-circular>
   </section>
 </template>
 

@@ -1,5 +1,11 @@
 <template>
   <section class="container">
+    <v-progress-circular
+      :size="70"
+      :width="7"
+      color="purple"
+      indeterminate
+    ></v-progress-circular>
     <div>
       <h1 class="title">
         mybest
@@ -15,7 +21,15 @@
 import firebase from "@/plugins/firebase";
 import { mapActions } from "vuex";
 export default {
+  // beforeCreate() {
+  //   console.log("beforeCreate");
+
+  //   this.$nuxt.$loading.start();
+  // },
   async mounted() {
+    console.log("login check start");
+    await this.$nextTick();
+    //await new Promise(resolve => setTimeout(resolve, 5000000));
     let user = await new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged(user => resolve(user));
     });
@@ -56,7 +70,7 @@ export default {
 body {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(#05fbff, #56b949);
+  /* background: linear-gradient(#05fbff, #56b949); */
 }
 
 .links {

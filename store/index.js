@@ -15,6 +15,12 @@ export const mutations = {
 }
 
 export const actions = {
+  // nuxtServerInit({commit}) {
+  //   if () {
+
+  //   }
+  // },
+
   login() {
     return new Promise((resolve, reject) => {
       firebase.auth().signInWithRedirect(googleProvider)
@@ -38,8 +44,8 @@ export const actions = {
   }
 }
 
-export const getters = {
-  isAuthenticated(state) {
-    return !!state.user
-  }
-}
+// export const getters = {
+//   isAuthenticated(state) {
+//     return !!state.user
+//   }
+// }

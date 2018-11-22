@@ -47,6 +47,15 @@ var database = firebase.database();
 var imgPathObj;
 
 export default {
+  fetch({ store, redirect }) {
+    console.log(store);
+    console.log("fetching data");
+
+    if (!store.state.user) {
+      return redirect("/login");
+    }
+  },
+
   components: {
     draggable
   },
@@ -60,7 +69,6 @@ export default {
       .once("value")
       .then(result => {
         if (result.val()) {
-          console.log(result.val());
           this.obj = Object.keys(result.val())
             .map(key => result.val()[key])
             .filter(function(v) {
@@ -112,14 +120,8 @@ export default {
         });
       });
   },
-  mounted: function() {
-    console.log("obj is " + this.obj);
-    console.log("mounted");
-  },
   methods: {
     getImgurlb(imgPath) {
-      console.log(this.imgURL);
-      console.log(this.imgURL[imgPath]);
       return this.imgURL[imgPath];
     },
     getImgurl(imgPath) {
@@ -280,5 +282,4 @@ img.itemImg {
   width: 5vw;
   height: 5vw;
 }
-
 </style>
