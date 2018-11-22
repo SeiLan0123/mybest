@@ -1,20 +1,30 @@
 <template>
-  <div>
-    <nuxt/>
+  <v-app>
+    <v-toolbar color="indigo" dark fixed app><v-toolbar-title>my best</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn nuxt to="testpage">テストページ</v-btn>
+      <v-spacer></v-spacer>
+      <p v-if="this.$store.state && this.$store.state.user">{{this.$store.state.user.displayName}}</p>
+    </v-toolbar>
+
+    <v-content>
+      <v-container fluid>
+        <nuxt/>
+      </v-container>
+    </v-content>
     <v-bottom-nav
       :active.sync="bottomNav"
       :value="true"
-      absolute
       fixed
-      color="transparent"
-    >
+      app
+      >
       <v-btn
         color="teal"
         flat
         value="ranking"
         nuxt
         to="/"
-      >
+        >
         <span>Ranking</span>
         <v-icon>format_list_numbered</v-icon>
       </v-btn>
@@ -23,7 +33,7 @@
         color="teal"
         flat
         value="favorites"
-      >
+        >
         <span>Favorites</span>
         <v-icon>favorite</v-icon>
       </v-btn>
@@ -34,12 +44,12 @@
         value="add"
         nuxt
         to="newdata"
-      >
+        >
         <span>New</span>
         <v-icon>add_circle_outline</v-icon>
       </v-btn>
     </v-bottom-nav>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -68,7 +78,6 @@ html {
 *:before,
 *:after {
   box-sizing: border-box;
-  margin: 0;
 }
 
 .button--green {

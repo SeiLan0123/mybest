@@ -1,43 +1,36 @@
 <template>
   <section>
 
-    <v-navigation-drawer></v-navigation-drawer>
-    <v-toolbar color="indigo" dark fixed><v-toolbar-title>my best</v-toolbar-title>
-    <v-spacer></v-spacer>
-  <v-btn nuxt to="testpage">テストページ</v-btn>
-   <v-spacer></v-spacer>
-   <p>{{this.$store.state.user.displayName}}</p></v-toolbar>
-
-<draggable element="ul" class="rankingListDiv" v-model="obj" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="draggingisEnd" @update="draggingUpdate">
-  <transition-group type="transition" :name="'flip'">
-  <li v-for="(a, index) in obj " class="rankingList" :key="a.id">
-     <v-flex xs12>
-            <v-card color="indigo" class="white--text">
-              <v-layout row>
-                <v-flex xs7>
-                  <v-card-title primary-title>
-                    <div>
-                      <div class="headline">{{index + 1}}位</div>
-                      <div>{{a.item}}</div>
-                      <div>{{a.plc}}</div>
-                    </div>
-                  </v-card-title>
-                </v-flex>
-                <v-flex xs5>
-                  <v-img
-                    v-show="a.imgPath"
-                    :src="getImgurlb(a.imgPath)"
-                    height="100px"
-                    contain
+    <draggable element="ul" class="rankingListDiv" v-model="obj" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="draggingisEnd" @update="draggingUpdate">
+    <transition-group type="transition" :name="'flip'">
+      <li v-for="(a, index) in obj " class="rankingList" :key="a.id">
+        <v-flex xs12>
+          <v-card color="indigo" class="white--text">
+            <v-layout row>
+              <v-flex xs7>
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">{{index + 1}}位</div>
+                    <div>{{a.item}}</div>
+                    <div>{{a.plc}}</div>
+                  </div>
+                </v-card-title>
+              </v-flex>
+              <v-flex xs5>
+                <v-img
+                  v-show="a.imgPath"
+                  :src="getImgurlb(a.imgPath)"
+                  height="100px"
+                  contain
                   ></v-img>
-                </v-flex>
-              </v-layout>
-              <v-divider light></v-divider>
-            </v-card>
-          </v-flex>
-  </li>
-  </transition-group>
-</draggable>
+              </v-flex>
+            </v-layout>
+            <v-divider light></v-divider>
+          </v-card>
+        </v-flex>
+      </li>
+    </transition-group>
+    </draggable>
 
 
   </section>
@@ -268,11 +261,9 @@ export default {
   font-size: 10pt;
   background-color: #fff;
 }
+
 ul.rankingListDiv {
-  height: calc(100vh - 70px - 70px);
   overflow: scroll;
-  margin-top: 70px;
-  margin-bottom: 0px;
   list-style: none;
 }
 
@@ -290,11 +281,4 @@ img.itemImg {
   height: 5vw;
 }
 
-html {
-  overflow: hidden;
-}
-
-body {
-  background: none;
-}
 </style>
