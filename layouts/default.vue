@@ -2,9 +2,49 @@
   <v-app>
     <v-toolbar color="indigo" dark fixed app><v-toolbar-title>my best</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn nuxt to="testpage">テストページ</v-btn>
+      <v-tabs
+        v-if="bottomNav=='ranking'"
+        slot="extension"
+        v-model="currentItem"
+        color="transparent"
+        fixed-tabs
+        slider-color="yellow"
+      >
+        <v-tab
+          v-for="item in items"
+          :href="'#tab-' + item"
+          :key="item"
+        >
+          {{ item }}
+        </v-tab>
+
+        <v-menu
+          v-if="more.length"
+          bottom
+          class="v-tabs__div"
+          left
+        >
+          <a slot="activator" class="v-tabs__item">
+            more
+            <v-icon>arrow_drop_down</v-icon>
+          </a>
+
+          <v-list class="grey lighten-3">
+            <v-list-tile
+              v-for="item in more"
+              :key="item"
+              @click="addItem(item)"
+            >
+              {{ item }}
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </v-tabs>
       <v-spacer></v-spacer>
       <p v-if="this.$store.state && this.$store.state.user">{{this.$store.state.user.displayName}}</p>
+
+
+
     </v-toolbar>
 
     <v-content>
@@ -55,7 +95,22 @@
 <script>
 export default {
   data() {
-    return { bottomNav: "ranking" };
+    return {
+      bottomNav: "ranking",
+      currentItem: "tab-Web",
+      items: ["Web", "Shopping", "Videos", "Images"],
+      more: ["News", "Maps", "Books", "Flights", "Apps"]
+    };
+  },
+  methods: {
+    addItem(item) {
+      const removed = this.items.splice(0, 1);
+      this.items.push(...this.more.splice(this.more.indexOf(item), 1));
+      this.more.push(...removed);
+      this.$nextTick(() => {
+        this.currentItem = "tab-" + item;
+      });
+    }
   }
 };
 </script>

@@ -1,11 +1,5 @@
 <template>
   <section class="container">
-    <v-progress-circular
-      :size="70"
-      :width="7"
-      color="purple"
-      indeterminate
-    ></v-progress-circular>
     <div>
       <h1 class="title">
         mybest
@@ -26,9 +20,16 @@ export default {
 
   //   this.$nuxt.$loading.start();
   // },
+  methods: {
+    ...mapActions(["login", "setUser"]),
+    doLogin() {
+      this.login()
+        .then(() => console.log("resolved"))
+        .catch(err => console.log(err));
+    }
+  },
   async mounted() {
     console.log("login check start");
-    await this.$nextTick();
     //await new Promise(resolve => setTimeout(resolve, 5000000));
     let user = await new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged(user => resolve(user));
@@ -36,14 +37,6 @@ export default {
     this.setUser(user);
     if (user) {
       this.$router.push("/");
-    }
-  },
-  methods: {
-    ...mapActions(["login", "setUser"]),
-    doLogin() {
-      this.login()
-        .then(() => console.log("resolved"))
-        .catch(err => console.log(err));
     }
   }
 };

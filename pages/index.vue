@@ -32,7 +32,6 @@
     </transition-group>
     </draggable>
 
-
   </section>
 </template>
 
@@ -52,7 +51,7 @@ export default {
     console.log("fetching data");
 
     if (!store.state.user) {
-      return redirect("/login");
+      return redirect("/loadpage");
     }
   },
 
