@@ -97,8 +97,8 @@ export default {
   data() {
     return {
       bottomNav: "ranking",
-      currentItem: "tab-Web",
-      items: ["Web", "Shopping", "Videos", "Images"],
+      currentItem: "tab-ラーメン",
+      items: ["ラーメン", "Shopping", "Videos", "Images"],
       more: ["News", "Maps", "Books", "Flights", "Apps"]
     };
   },

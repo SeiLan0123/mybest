@@ -32,6 +32,8 @@
     </transition-group>
     </draggable>
 
+    {{this.$store.state.currentItem}}
+
   </section>
 </template>
 

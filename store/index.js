@@ -5,7 +5,8 @@ const googleProvider = new firebase.auth.GoogleAuthProvider()
 export const strict = false
 
 export const state = () => ({
-  user: null
+  user: null,
+  currentItem: "tab-ラーメン"
 })
 
 export const mutations = {
