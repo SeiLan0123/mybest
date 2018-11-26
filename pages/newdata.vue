@@ -6,6 +6,14 @@
     label="品目"
     required
     ></v-text-field>
+    <v-flex xs12 sm6 d-flex>
+      <v-select
+      v-model="category"
+      :items="categoryArray"
+      label="カテゴリ"
+      box
+      ></v-select>
+    </v-flex>
     <v-text-field
     v-model="plc"
     label="店名"
@@ -33,22 +41,27 @@ export default {
       obj: [],
       uploadFile: "",
       uploadFileData: "",
-      imgPath: ""
+      imgPath: "",
+      category: "",
+      categoryArray: ["ラーメン", "カレーライス", "パスタ"]
     };
   },
-  created: function() {
-    firebase
-      .database()
-      .ref("mybest/ranking/" + this.$store.state.user.uid)
-      .once("value")
-      .then(result => {
-        if (result.val()) {
-          obj = result.val();
-          addCount = Object.keys(obj).length + 1;
-        }
-      });
-  },
+  created: function() {},
   methods: {
+    categoryChanged() {
+      firebase
+        .database()
+        .ref(
+          "mybest/ranking/" + this.$store.state.user.uid + "/" + this.category
+        )
+        .once("value")
+        .then(result => {
+          if (result.val()) {
+            obj = result.val();
+            addCount = Object.keys(obj).length + 1;
+          }
+        });
+    },
     //データベースに追加
     add() {
       var metadata = {
@@ -114,6 +127,8 @@ export default {
         .ref(
           "mybest/ranking/" +
             this.$store.state.user.uid +
+            "/" +
+            this.category +
             "/" +
             String(addCount)
         )

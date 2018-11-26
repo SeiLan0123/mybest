@@ -6,7 +6,7 @@ export const strict = false
 
 export const state = () => ({
   user: null,
-  currentItem: "tab-ラーメン"
+  currentItem: "ラーメン"
 })
 
 export const mutations = {

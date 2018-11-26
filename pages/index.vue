@@ -32,8 +32,6 @@
     </transition-group>
     </draggable>
 
-    {{this.$store.state.currentItem}}
-
   </section>
 </template>
 
@@ -66,7 +64,12 @@ export default {
   },
   created: function() {
     database
-      .ref("mybest/ranking/" + this.$store.state.user.uid)
+      .ref(
+        "mybest/ranking/" +
+          this.$store.state.user.uid +
+          "/" +
+          this.$store.state.currentItem
+      )
       .once("value")
       .then(result => {
         if (result.val()) {
@@ -174,7 +177,12 @@ export default {
     },
     draggingUpdate() {
       database
-        .ref("mybest/ranking/" + this.$store.state.user.uid)
+        .ref(
+          "mybest/ranking/" +
+            this.$store.state.user.uid +
+            "/" +
+            this.$store.state.currentItem
+        )
         .set(this.obj);
       console.log("更新完了");
     },

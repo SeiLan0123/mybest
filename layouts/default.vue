@@ -12,7 +12,7 @@
       >
         <v-tab
           v-for="item in items"
-          :href="'#tab-' + item"
+          :href="'#' + item"
           :key="item"
         >
           {{ item }}
@@ -97,8 +97,8 @@ export default {
   data() {
     return {
       bottomNav: "ranking",
-      currentItem: "tab-ラーメン",
-      items: ["ラーメン", "Shopping", "Videos", "Images"],
+      currentItem: "ラーメン",
+      items: ["ラーメン", "カレー", "パスタ", "Images"],
       more: ["News", "Maps", "Books", "Flights", "Apps"]
     };
   },
@@ -108,7 +108,7 @@ export default {
       this.items.push(...this.more.splice(this.more.indexOf(item), 1));
       this.more.push(...removed);
       this.$nextTick(() => {
-        this.currentItem = "tab-" + item;
+        this.currentItem = item;
       });
     }
   }
