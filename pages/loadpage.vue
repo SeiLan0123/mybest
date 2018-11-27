@@ -1,5 +1,6 @@
 <template>
-  <h1>loading....</h1>
+  <div>
+  </div>
 </template>
 
 <script>
@@ -7,6 +8,7 @@ import firebase from "@/plugins/firebase";
 import { mapActions } from "vuex";
 
 export default {
+  layout: "empty",
   async mounted() {
     console.log("login check start");
     //await new Promise(resolve => setTimeout(resolve, 5000000));

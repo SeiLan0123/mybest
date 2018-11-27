@@ -9,9 +9,13 @@ export const state = () => ({
   currentItem: "ラーメン"
 })
 
+
 export const mutations = {
   setUser(state, payload) {
     state.user = payload
+  },
+  setCurrentItem(state, ciPayload) {
+    state.currentItem = ciPayload.currentItem;
   }
 }
 
@@ -42,7 +46,12 @@ export const actions = {
 
   setUser({ commit }, payload) {
     commit('setUser', payload)
+  },
+
+  setCurrentItem({ commit }, ciPayload) {
+    commit('setCurrentItem', ciPayload)
   }
+
 }
 
 // export const getters = {

@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -103,6 +104,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["setCurrentItem"]),
     addItem(item) {
       const removed = this.items.splice(0, 1);
       this.items.push(...this.more.splice(this.more.indexOf(item), 1));
@@ -110,6 +112,15 @@ export default {
       this.$nextTick(() => {
         this.currentItem = item;
       });
+    }
+  },
+  watch: {
+    currentItem(newValue) {
+      console.log("new current Item is " + newValue);
+      var payload = {
+        currentItem: newValue
+      };
+      this.setCurrentItem(payload);
     }
   }
 };

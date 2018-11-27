@@ -63,68 +63,75 @@ export default {
     return { obj: [], imgURL: {}, bottomNav: "recent" };
   },
   created: function() {
-    database
-      .ref(
-        "mybest/ranking/" +
-          this.$store.state.user.uid +
-          "/" +
-          this.$store.state.currentItem
-      )
-      .once("value")
-      .then(result => {
-        if (result.val()) {
-          this.obj = Object.keys(result.val())
-            .map(key => result.val()[key])
-            .filter(function(v) {
-              return v;
-            })
-            .sort(function(a, b) {
-              return a.rank - b.rank;
-            });
-        }
-        this.obj.forEach(s => {
-          if (s.imgPath) {
-            console.log("img path is alive");
-            imgPathObj = firebase
-              .storage()
-              .ref()
-              .child(s.imgPath);
-            imgPathObj
-              .getDownloadURL()
-              .then(url => {
-                var path = s.imgPath;
-                this.$set(this.imgURL, path, url);
-                //              this.imgURL[path] = url;
-              })
-              .catch(function(error) {
-                console.log(error);
-                switch (error.code) {
-                  case "storage/object-not-found":
-                    console.log("File doesn't exist");
-                    break;
-
-                  case "storage/unauthorized":
-                    console.log(
-                      "User doesn't have permission to access the object"
-                    );
-                    break;
-
-                  case "storage/canceled":
-                    console.log("User canceled the upload");
-                    break;
-
-                  case "storage/unknown":
-                    console.log(
-                      "Unknown error occurred, inspect the server response"
-                    );
-                    break;
-                }
-              });
-          }
-        });
-      });
+    this.displayList();
   },
   methods: {
+    displayList() {
+      console.log("displayList");
+      database
+        .ref(
+          "mybest/ranking/" +
+            this.$store.state.user.uid +
+            "/" +
+            this.$store.state.currentItem
+        )
+        .once("value")
+        .then(result => {
+          console.log(result);
+          if (result.val()) {
+            this.obj = Object.keys(result.val())
+              .map(key => result.val()[key])
+              .filter(function(v) {
+                return v;
+              })
+              .sort(function(a, b) {
+                return a.rank - b.rank;
+              });
+            this.obj.forEach(s => {
+              if (s.imgPath) {
+                console.log("img path is alive");
+                imgPathObj = firebase
+                  .storage()
+                  .ref()
+                  .child(s.imgPath);
+                imgPathObj
+                  .getDownloadURL()
+                  .then(url => {
+                    var path = s.imgPath;
+                    this.$set(this.imgURL, path, url);
+                    //              this.imgURL[path] = url;
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    switch (error.code) {
+                      case "storage/object-not-found":
+                        console.log("File doesn't exist");
+                        break;
+
+                      case "storage/unauthorized":
+                        console.log(
+                          "User doesn't have permission to access the object"
+                        );
+                        break;
+
+                      case "storage/canceled":
+                        console.log("User canceled the upload");
+                        break;
+
+                      case "storage/unknown":
+                        console.log(
+                          "Unknown error occurred, inspect the server response"
+                        );
+                        break;
+                    }
+                  });
+              }
+            });
+          } else {
+            this.obj = null;
+          }
+        });
+    },
     getImgurlb(imgPath) {
       return this.imgURL[imgPath];
     },
@@ -229,6 +236,10 @@ export default {
     }*/
   },
   computed: {
+    getTabName() {
+      console.log("getTabName");
+      return this.$store.state.currentItem;
+    },
     jsonobj() {
       return JSON.stringify(this.obj, null, 4);
     },
@@ -252,6 +263,11 @@ export default {
     }*/
   },
   watch: {
+    getTabName(currentItem) {
+      console.log("changed currentItem");
+      this.displayList();
+    },
+
     isDragging(newValue) {
       if (newValue) {
         this.delayedDragging = true;
