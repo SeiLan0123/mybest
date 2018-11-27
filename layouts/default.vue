@@ -101,8 +101,8 @@ export default {
     return {
       bottomNav: "ranking",
       currentItem: "ラーメン",
-      items: ["ラーメン", "カレー", "パスタ", "Images"],
-      more: ["News", "Maps", "Books", "Flights", "Apps"]
+      items: ["ラーメン", "カレー", "パスタ", "丼"],
+      more: ["ドリンク", "うどん・そば", "スイーツ"]
     };
   },
   methods: {

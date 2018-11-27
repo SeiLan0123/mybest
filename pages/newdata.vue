@@ -1,11 +1,6 @@
 <template>
   <section>
     <div class="addform">
-    <v-text-field
-    v-model="item"
-    label="品目"
-    required
-    ></v-text-field>
     <v-flex xs12 sm6 d-flex>
       <v-select
       v-model="category"
@@ -15,13 +10,18 @@
       ></v-select>
     </v-flex>
     <v-text-field
+    v-model="item"
+    label="品目"
+    required
+    ></v-text-field>
+    <v-text-field
     v-model="plc"
     label="店名"
     required
     ></v-text-field>
-    <v-btn @click="add()">追加</v-btn>
     <input type="file" class="file" @change="picUpload">
     <p><img v-show="uploadFile" style="width: 50vw" :src="uploadFile" class="itemImage"></p>
+ <v-btn @click="add()">追加</v-btn>
     </div>
     </section>
 </template>
@@ -43,7 +43,15 @@ export default {
       uploadFileData: "",
       imgPath: "",
       category: "",
-      categoryArray: ["ラーメン", "カレーライス", "パスタ"]
+      categoryArray: [
+        "ラーメン",
+        "カレー",
+        "パスタ",
+        "丼",
+        "ドリンク",
+        "うどん・そば",
+        "スイーツ"
+      ]
     };
   },
   created: function() {},

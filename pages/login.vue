@@ -24,7 +24,10 @@ export default {
     ...mapActions(["login", "setUser"]),
     doLogin() {
       this.login()
-        .then(() => console.log("resolved"))
+        .then(() => {
+          console.log("resolved");
+          //username確認処理
+        })
         .catch(err => console.log(err));
     }
   },
