@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="loading-page" v-if="loading">
-    <p>Loading...</p>
+    <p>mybest</p>
   </div>
 </template>
 

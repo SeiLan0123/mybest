@@ -3,7 +3,7 @@
     <v-toolbar color="indigo" dark fixed app><v-toolbar-title>my best</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tabs
-        v-if="bottomNav=='ranking'"
+        v-if="bottomNav=='ranking'||bottomNav=='people'"
         slot="extension"
         v-model="currentItem"
         color="transparent"
@@ -72,10 +72,12 @@
       <v-btn
         color="teal"
         flat
-        value="favorites"
+        value="people"
+        nuxt
+        to="people"
         >
-        <span>Favorites</span>
-        <v-icon>favorite</v-icon>
+        <span>People</span>
+        <v-icon>people</v-icon>
       </v-btn>
 
       <v-btn

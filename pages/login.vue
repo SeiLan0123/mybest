@@ -2,7 +2,7 @@
   <section class="container">
     <div>
       <h1 class="title">
-        mybest
+        loading...
       </h1>
       <div class="links">
         <input type="button" class="button--green" value="Login" @click="doLogin">
