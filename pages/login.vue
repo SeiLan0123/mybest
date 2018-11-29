@@ -1,11 +1,8 @@
 <template>
   <section class="container">
     <div>
-      <h1 class="title">
-        loading...
-      </h1>
       <div class="links">
-        <input type="button" class="button--green" value="Login" @click="doLogin">
+        <input type="button" class="button--green" value="Login" @click="doLogin()">
       </div>
     </div>
   </section>
@@ -14,19 +11,22 @@
 <script>
 import firebase from "@/plugins/firebase";
 import { mapActions } from "vuex";
+
+var database = firebase.database();
+
 export default {
+  layout: "empty",
   // beforeCreate() {
   //   console.log("beforeCreate");
 
   //   this.$nuxt.$loading.start();
   // },
   methods: {
-    ...mapActions(["login", "setUser"]),
+    ...mapActions(["login", "setUser", "setUserName"]),
     doLogin() {
       this.login()
         .then(() => {
           console.log("resolved");
-          //username確認処理
         })
         .catch(err => console.log(err));
     }
@@ -38,8 +38,35 @@ export default {
       firebase.auth().onAuthStateChanged(user => resolve(user));
     });
     this.setUser(user);
+
     if (user) {
-      this.$router.push("/");
+      console.log("hello user");
+
+      database
+        .ref("mybest/user/" + user.uid)
+        .once("value")
+        .then(result => {
+          console.log("sry i find it");
+          if (result.val()) {
+            console.log("firebase connection is success");
+
+            if (result.val().username) {
+              console.log("uid is alive");
+              this.setUserName(result.val().username);
+              this.$router.push("/");
+            } else {
+              console.log("Unknown username");
+              this.$router.push("username");
+            }
+          } else {
+            this.$router.push("username");
+          }
+        })
+        .catch(err => {
+          console.log("uid error");
+          console.log(err);
+        });
+      //this.$router.push("/");
     }
   }
 };

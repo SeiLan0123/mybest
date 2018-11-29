@@ -41,7 +41,9 @@
         </v-menu>
       </v-tabs>
       <v-spacer></v-spacer>
-      <p v-if="this.$store.state && this.$store.state.user">{{this.$store.state.user.displayName}}</p>
+      <p v-if="this.$store.state && this.$store.state.user">{{this.$store.state.user.displayName}}
+        <v-btn @click="logoutBtn()">ログアウト</v-btn>
+      </p>
 
 
 
@@ -106,7 +108,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setCurrentItem"]),
+    ...mapActions(["setCurrentItem", "logout"]),
     addItem(item) {
       const removed = this.items.splice(0, 1);
       this.items.push(...this.more.splice(this.more.indexOf(item), 1));
@@ -114,6 +116,10 @@ export default {
       this.$nextTick(() => {
         this.currentItem = item;
       });
+    },
+    logoutBtn() {
+      this.logout();
+      this.$router.push("login");
     }
   },
   watch: {

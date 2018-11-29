@@ -6,7 +6,8 @@ export const strict = false
 
 export const state = () => ({
   user: null,
-  currentItem: "ラーメン"
+  currentItem: "ラーメン",
+  userName: null
 })
 
 
@@ -16,6 +17,9 @@ export const mutations = {
   },
   setCurrentItem(state, ciPayload) {
     state.currentItem = ciPayload.currentItem;
+  },
+  setUserName(state, unPayload) {
+    state.userName = unPayload.userName;
   }
 }
 
@@ -28,6 +32,7 @@ export const actions = {
 
   login() {
     return new Promise((resolve, reject) => {
+
       firebase.auth().signInWithRedirect(googleProvider)
         .then(() => resolve())
         .catch((err) => reject(err))
@@ -50,6 +55,10 @@ export const actions = {
 
   setCurrentItem({ commit }, ciPayload) {
     commit('setCurrentItem', ciPayload)
+  },
+
+  setUserName({ commit }, unPayload) {
+    commit('setUserName', unPayload)
   }
 
 }
