@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import firebase from "firebase";
 import "vuetify/dist/vuetify.min.css";
 export default {
   data() {
@@ -28,7 +29,11 @@ export default {
         .set({
           username: this.userName
         });
-      console.log("username完了");
+    }
+  },
+  created() {
+    if (!this.$store.state.user) {
+      this.$router.push("login");
     }
   },
 
