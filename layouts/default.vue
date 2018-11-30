@@ -97,7 +97,10 @@
 </template>
 
 <script>
+import firebase from "@/plugins/firebase";
 import { mapActions } from "vuex";
+
+var database = firebase.database();
 export default {
   data() {
     return {
@@ -108,7 +111,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setCurrentItem", "logout"]),
+    ...mapActions(["setCurrentItem", "logout", "setUserName"]),
     addItem(item) {
       const removed = this.items.splice(0, 1);
       this.items.push(...this.more.splice(this.more.indexOf(item), 1));
@@ -134,6 +137,32 @@ export default {
   created() {
     if (!this.$store.state.user) {
       this.$router.push("login");
+    } else if (!this.$store.state.userName) {
+      console.log("hello ");
+
+      database
+        .ref("mybest/user/" + this.$store.state.user.uid)
+        .once("value")
+        .then(result => {
+          console.log("sry i find it");
+          if (result.val()) {
+            console.log("firebase connection is success");
+
+            if (result.val().username) {
+              console.log(result.val().username);
+              this.setUserName(result.val());
+            } else {
+              console.log("Unknown username");
+              this.$router.push("username");
+            }
+          } else {
+            this.$router.push("username");
+          }
+        })
+        .catch(err => {
+          console.log("uid error");
+          console.log(err);
+        });
     }
   }
 };

@@ -19,7 +19,7 @@ export const mutations = {
     state.currentItem = ciPayload.currentItem;
   },
   setUserName(state, unPayload) {
-    state.userName = unPayload.userName;
+    state.userName = unPayload.username;
   }
 }
 
@@ -58,6 +58,8 @@ export const actions = {
   },
 
   setUserName({ commit }, unPayload) {
+
+
     commit('setUserName', unPayload)
   }
 

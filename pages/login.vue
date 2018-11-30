@@ -52,7 +52,7 @@ export default {
 
             if (result.val().username) {
               console.log("uid is alive");
-              this.setUserName(result.val().username);
+              this.setUserName(result.val());
               this.$router.push("/");
             } else {
               console.log("Unknown username");
