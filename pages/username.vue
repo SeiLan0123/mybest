@@ -1,7 +1,7 @@
 <template>
+<v-app>
   <section>
     <v-alert
-    color="red"
     v-model="alert"
     dismissible
     type="error"
@@ -13,11 +13,13 @@
     </h1>
     <v-text-field
     v-model="userName"
+    :rules="[rules.username]"
     label="ユーザーネーム"
     required
     ></v-text-field>
-    <v-btn value="aa" @click="register()">登録</v-btn>
+    <v-btn v-if="btnFlg" value="aa" @click="register()">登録</v-btn>
   </section>
+</v-app>
 </template>
 
 <script>
@@ -30,7 +32,16 @@ export default {
   data() {
     return {
       userName: null,
-      alert: false
+      alert: false,
+      btnFlg: false,
+      rules: {
+        username: value => {
+          const pattern = /^[a-zA-Z0-9]+$/;
+
+          this.btnFlg = pattern.test(value || "");
+          return pattern.test(value) || "Invalid Username.";
+        }
+      }
     };
   },
 
