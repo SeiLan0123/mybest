@@ -42,7 +42,7 @@ export default {
       uploadFile: "",
       uploadFileData: "",
       imgPath: "",
-      category: "",
+      category: "ラーメン",
       categoryArray: [
         "ラーメン",
         "カレー",
@@ -60,7 +60,7 @@ export default {
       firebase
         .database()
         .ref(
-          "mybest/ranking/" + this.$store.state.user.uid + "/" + this.category
+          "mybest/ranking/" + this.$store.state.userName + "/" + this.category
         )
         .once("value")
         .then(result => {
@@ -81,7 +81,7 @@ export default {
         var uploadTask = storageRef
           .child(
             "mybest/" +
-              this.$store.state.user.uid +
+              this.$store.state.userName +
               "/" +
               this.uploadFileData.name
           )
@@ -134,7 +134,7 @@ export default {
       database
         .ref(
           "mybest/ranking/" +
-            this.$store.state.user.uid +
+            this.$store.state.userName +
             "/" +
             this.category +
             "/" +
@@ -165,7 +165,7 @@ export default {
         this.uploadFile = e.target.result;
       };
       this.imgPath =
-        "mybest/" + this.$store.state.user.uid + "/" + this.uploadFileData.name;
+        "mybest/" + this.$store.state.userName + "/" + this.uploadFileData.name;
 
       reader.readAsDataURL(this.uploadFile);
     }

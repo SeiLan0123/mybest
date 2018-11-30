@@ -71,7 +71,7 @@ export default {
       database
         .ref(
           "mybest/ranking/" +
-            this.$store.state.user.uid +
+            this.$store.state.userName +
             "/" +
             this.$store.state.currentItem
         )
@@ -135,47 +135,6 @@ export default {
     getImgurlb(imgPath) {
       return this.imgURL[imgPath];
     },
-    getImgurl(imgPath) {
-      if (imgPath) {
-        var imgPathUrl;
-        console.log(imgPath);
-        var imgPathObj = firebase
-          .storage()
-          .ref()
-          .child(imgPath);
-        imgPathObj
-          .getDownloadURL()
-          .then(url => {
-            console.log(url);
-            imgPathUrl = url;
-          })
-          .catch(function(error) {
-            console.log(error);
-            switch (error.code) {
-              case "storage/object-not-found":
-                console.log("File doesn't exist");
-                break;
-
-              case "storage/unauthorized":
-                console.log(
-                  "User doesn't have permission to access the object"
-                );
-                break;
-
-              case "storage/canceled":
-                console.log("User canceled the upload");
-                break;
-
-              case "storage/unknown":
-                console.log(
-                  "Unknown error occurred, inspect the server response"
-                );
-                break;
-            }
-          });
-        return imgPathUrl;
-      }
-    },
     draggingisEnd() {
       this.isDragging = true;
       for (var i = 0; i < Object.keys(this.obj).length; i++) {
@@ -186,7 +145,7 @@ export default {
       database
         .ref(
           "mybest/ranking/" +
-            this.$store.state.user.uid +
+            this.$store.state.userName +
             "/" +
             this.$store.state.currentItem
         )
