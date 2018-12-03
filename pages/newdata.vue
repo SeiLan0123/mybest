@@ -29,6 +29,8 @@
 
 <script>
 import firebase from "@/plugins/firebase";
+import { EXIF } from "exif-js";
+
 var addCount = 0;
 var database = firebase.database();
 var obj;
@@ -168,6 +170,11 @@ export default {
         "mybest/" + this.$store.state.userName + "/" + this.uploadFileData.name;
 
       reader.readAsDataURL(this.uploadFile);
+
+      EXIF.getData(this.uploadFileData, () => {
+        var orientation = this.uploadFileData.exifdata;
+        console.log(orientation);
+      });
     }
   }
 };

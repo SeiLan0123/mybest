@@ -25,7 +25,7 @@
 <script>
 import firebase from "firebase";
 import "vuetify/dist/vuetify.min.css";
-
+import { mapActions } from "vuex";
 var database = firebase.database();
 
 export default {
@@ -46,6 +46,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(["setUserName"]),
     register() {
       database
         .ref("mybest/username/" + this.userName)
@@ -59,7 +60,17 @@ export default {
             });
             console.log("success!!");
 
-            database.ref("mybest/username/" + this.userName).set(true);
+            database
+              .ref("mybest/username/" + this.userName)
+              .set(true)
+              .then(() => {
+                var payloadObj = [];
+                console.log("FRDB:setUserName");
+                console.log(this.userName);
+                payloadObj.username = this.userName;
+                this.setUserName(payloadObj);
+                this.$router.push("/");
+              });
           } else {
             console.log("failed");
             this.alert = true;
@@ -73,6 +84,8 @@ export default {
   created() {
     if (!this.$store.state.user) {
       this.$router.push("login");
+    } else if (this.$store.state.userName) {
+      this.$router.push("/");
     }
   },
   computed: {},

@@ -67,6 +67,10 @@ export default {
           console.log(err);
         });
       //this.$router.push("/");
+    } else {
+      var payloadObj = [];
+      payloadObj.username = null;
+      this.setUserName(payloadObj);
     }
   }
 };
