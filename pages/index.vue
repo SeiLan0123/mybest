@@ -20,17 +20,49 @@
                 <v-img
                   v-show="a.imgPath"
                   :src="getImgurlb(a.imgPath)"
-                  height="100px"
+                  height="120px"
                   contain
                   ></v-img>
               </v-flex>
+              <v-flex xs4>
+                <v-btn small fab @click="dialog = true"><v-icon>clear</v-icon></v-btn>
+              </v-flex>
             </v-layout>
             <v-divider light></v-divider>
+
           </v-card>
         </v-flex>
       </li>
     </transition-group>
     </draggable>
+    <v-dialog
+      v-model="dialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">カードを削除しますか?</v-card-title>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialog = false"
+          >
+            いいえ
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialog = false"
+          >
+            はい
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
   </section>
 </template>
@@ -60,7 +92,7 @@ export default {
   },
 
   data(context) {
-    return { obj: [], imgURL: {}, bottomNav: "recent" };
+    return { obj: [], imgURL: {}, bottomNav: "ranking", dialog: false };
   },
   created: function() {
     this.displayList();
@@ -256,11 +288,11 @@ ul.rankingListDiv {
 .ghost {
   opacity: 0;
 }
-
+/*
 .sortable-drag {
   font-size: 15pt;
 }
-
+*/
 img.itemImg {
   margin: auto;
   width: 5vw;
