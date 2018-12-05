@@ -63,7 +63,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-{{this.obj}}
   </section>
 </template>
 
