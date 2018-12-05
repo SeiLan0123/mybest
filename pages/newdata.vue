@@ -56,9 +56,14 @@ export default {
       ]
     };
   },
-  created: function() {},
+  created() {
+    this.getLength();
+  },
   methods: {
     categoryChanged() {
+      this.getLength();
+    },
+    getLength() {
       firebase
         .database()
         .ref(
@@ -68,7 +73,7 @@ export default {
         .then(result => {
           if (result.val()) {
             obj = result.val();
-            addCount = Object.keys(obj).length + 1;
+            addCount = Object.keys(obj).length;
           }
         });
     },

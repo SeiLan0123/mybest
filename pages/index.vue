@@ -1,7 +1,7 @@
 <template>
   <section>
 
-    <draggable element="ul" class="rankingListDiv" v-model="obj" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="draggingisEnd" @update="draggingUpdate">
+    <draggable element="ul" class="rankingListDiv" v-model="obj" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="draggingisEnd">
     <transition-group type="transition" :name="'flip'">
       <li v-for="(a, index) in obj " class="rankingList" :key="a.id">
         <v-flex xs12>
@@ -25,7 +25,7 @@
                   ></v-img>
               </v-flex>
               <v-flex xs4>
-                <v-btn small fab @click="dialog = true"><v-icon>clear</v-icon></v-btn>
+                <v-btn small fab @click="deleteBtn(index)"><v-icon>clear</v-icon></v-btn>
               </v-flex>
             </v-layout>
             <v-divider light></v-divider>
@@ -56,14 +56,14 @@
           <v-btn
             color="green darken-1"
             flat="flat"
-            @click="dialog = false"
+            @click="deleteItem"
           >
             はい
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+{{this.obj}}
   </section>
 </template>
 
@@ -92,12 +92,27 @@ export default {
   },
 
   data(context) {
-    return { obj: [], imgURL: {}, bottomNav: "ranking", dialog: false };
+    return {
+      obj: [],
+      imgURL: {},
+      bottomNav: "ranking",
+      dialog: false,
+      deleteIndex: null
+    };
   },
   created: function() {
     this.displayList();
   },
   methods: {
+    deleteBtn(index1) {
+      this.dialog = true;
+      this.deleteIndex = index1;
+    },
+    deleteItem() {
+      console.log(this.deleteIndex);
+      this.obj.splice(this.deleteIndex, 1);
+      this.dialog = false;
+    },
     displayList() {
       console.log("displayList");
       database
@@ -173,17 +188,7 @@ export default {
         this.obj[i].rank = String(i + 1);
       }
     },
-    draggingUpdate() {
-      database
-        .ref(
-          "mybest/ranking/" +
-            this.$store.state.userName +
-            "/" +
-            this.$store.state.currentItem
-        )
-        .set(this.obj);
-      console.log("更新完了");
-    },
+    //    draggingUpdate() {},
     onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element;
       const draggedElement = draggedContext.element;
@@ -254,6 +259,18 @@ export default {
     }*/
   },
   watch: {
+    obj: function() {
+      console.log("obj is changed");
+      database
+        .ref(
+          "mybest/ranking/" +
+            this.$store.state.userName +
+            "/" +
+            this.$store.state.currentItem
+        )
+        .set(this.obj);
+      console.log("更新完了");
+    },
     getTabName(currentItem) {
       console.log("changed currentItem");
       this.displayList();

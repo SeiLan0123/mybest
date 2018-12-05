@@ -41,7 +41,7 @@
         </v-menu>
       </v-tabs>
       <v-spacer></v-spacer>
-      <p v-if="this.$store.state && this.$store.state.user">{{this.$store.state.user.displayName}}
+      <p v-if="this.$store.state && this.$store.state.userName">{{this.$store.state.userName}}
         <v-btn @click="logoutBtn()">ログアウト</v-btn>
       </p>
 
