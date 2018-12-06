@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <v-toolbar color="indigo" dark fixed app><v-toolbar-title>my best</v-toolbar-title>
+    <v-toolbar color="indigo" dark fixed app>
+      <v-toolbar-title>my best</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-tabs
         v-if="bottomNav=='ranking'||bottomNav=='people'"
@@ -10,43 +11,23 @@
         fixed-tabs
         slider-color="yellow"
       >
-        <v-tab
-          v-for="item in items"
-          :href="'#' + item"
-          :key="item"
-        >
-          {{ item }}
-        </v-tab>
+        <v-tab v-for="item in items" :href="'#' + item" :key="item">{{ item }}</v-tab>
 
-        <v-menu
-          v-if="more.length"
-          bottom
-          class="v-tabs__div"
-          left
-        >
-          <a slot="activator" class="v-tabs__item">
-            more
+        <v-menu v-if="more.length" bottom class="v-tabs__div" left>
+          <a slot="activator" class="v-tabs__item">more
             <v-icon>arrow_drop_down</v-icon>
           </a>
 
           <v-list class="grey lighten-3">
-            <v-list-tile
-              v-for="item in more"
-              :key="item"
-              @click="addItem(item)"
-            >
-              {{ item }}
-            </v-list-tile>
+            <v-list-tile v-for="item in more" :key="item" @click="addItem(item)">{{ item }}</v-list-tile>
           </v-list>
         </v-menu>
       </v-tabs>
       <v-spacer></v-spacer>
-      <p v-if="this.$store.state && this.$store.state.userName">{{this.$store.state.userName}}
+      <p v-if="this.$store.state && this.$store.state.userName">
+        {{this.$store.state.userName}}
         <v-btn @click="logoutBtn()">ログアウト</v-btn>
       </p>
-
-
-
     </v-toolbar>
 
     <v-content>
@@ -54,41 +35,18 @@
         <nuxt/>
       </v-container>
     </v-content>
-    <v-bottom-nav
-      :active.sync="bottomNav"
-      :value="true"
-      fixed
-      app
-      >
-      <v-btn
-        color="teal"
-        flat
-        value="ranking"
-        nuxt
-        to="/"
-        >
+    <v-bottom-nav :active.sync="bottomNav" :value="true" fixed app>
+      <v-btn color="teal" flat value="ranking" nuxt to="/">
         <span>Ranking</span>
         <v-icon>format_list_numbered</v-icon>
       </v-btn>
 
-      <v-btn
-        color="teal"
-        flat
-        value="people"
-        nuxt
-        to="people"
-        >
+      <v-btn color="teal" flat value="people" nuxt to="people">
         <span>People</span>
         <v-icon>people</v-icon>
       </v-btn>
 
-      <v-btn
-        color="teal"
-        flat
-        value="add"
-        nuxt
-        to="newdata"
-        >
+      <v-btn color="teal" flat value="add" nuxt to="newdata">
         <span>New</span>
         <v-icon>add_circle_outline</v-icon>
       </v-btn>
@@ -144,7 +102,6 @@ export default {
         .ref("mybest/user/" + this.$store.state.user.uid)
         .once("value")
         .then(result => {
-          console.log("sry i find it");
           if (result.val()) {
             console.log("firebase connection is success");
 

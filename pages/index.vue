@@ -1,65 +1,53 @@
 <template>
   <section>
-
-    <draggable element="ul" class="rankingListDiv" v-model="obj" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="draggingisEnd">
-    <transition-group type="transition" :name="'flip'">
-      <li v-for="(a, index) in obj " class="rankingList" :key="a.id">
-        <v-flex xs12>
-          <v-card color="indigo" class="white--text">
-            <v-layout row>
-              <v-flex xs7>
-                <v-card-title primary-title>
-                  <div>
-                    <div class="headline">{{index + 1}}位</div>
-                    <div>{{a.item}}</div>
-                    <div>{{a.plc}}</div>
-                  </div>
-                </v-card-title>
-              </v-flex>
-              <v-flex xs5>
-                <v-img
-                  v-show="a.imgPath"
-                  :src="getImgurlb(a.imgPath)"
-                  height="120px"
-                  contain
-                  ></v-img>
-              </v-flex>
-              <v-flex xs4>
-                <v-btn small fab @click="deleteBtn(index)"><v-icon>clear</v-icon></v-btn>
-              </v-flex>
-            </v-layout>
-            <v-divider light></v-divider>
-
-          </v-card>
-        </v-flex>
-      </li>
-    </transition-group>
-    </draggable>
-    <v-dialog
-      v-model="dialog"
-      max-width="290"
+    <draggable
+      element="ul"
+      class="rankingListDiv"
+      v-model="obj"
+      :options="dragOptions"
+      :move="onMove"
+      @start="isDragging=true"
+      @end="draggingisEnd"
     >
+      <transition-group type="transition" :name="'flip'">
+        <li v-for="(a, index) in obj " class="rankingList" :key="a.id">
+          <v-flex xs12>
+            <v-card color="indigo" class="white--text">
+              <v-layout row>
+                <v-flex xs7>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline">{{index + 1}}位</div>
+                      <div>{{a.item}}</div>
+                      <div>{{a.plc}}</div>
+                    </div>
+                  </v-card-title>
+                </v-flex>
+                <v-flex xs5>
+                  <v-img v-show="a.imgPath" :src="getImgurlb(a.imgPath)" height="120px" contain></v-img>
+                </v-flex>
+                <v-flex xs4>
+                  <v-btn small fab @click="deleteBtn(index)">
+                    <v-icon>clear</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+              <v-divider light></v-divider>
+            </v-card>
+          </v-flex>
+        </li>
+      </transition-group>
+    </draggable>
+    <v-dialog v-model="dialog" max-width="290">
       <v-card>
         <v-card-title class="headline">カードを削除しますか?</v-card-title>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="dialog = false"
-          >
-            いいえ
-          </v-btn>
+          <v-btn color="green darken-1" flat="flat" @click="dialog = false">いいえ</v-btn>
 
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="deleteItem"
-          >
-            はい
-          </v-btn>
+          <v-btn color="green darken-1" flat="flat" @click="deleteItem">はい</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -114,6 +102,8 @@ export default {
     },
     displayList() {
       console.log("displayList");
+      console.log(this.$store.state.userName);
+
       database
         .ref(
           "mybest/ranking/" +
@@ -231,6 +221,9 @@ export default {
     }*/
   },
   computed: {
+    getUserName() {
+      return this.$store.state.userName;
+    },
     getTabName() {
       console.log("getTabName");
       return this.$store.state.currentItem;
@@ -258,17 +251,23 @@ export default {
     }*/
   },
   watch: {
+    getUserName() {
+      this.displayList();
+    },
+
     obj: function() {
-      console.log("obj is changed");
-      database
-        .ref(
-          "mybest/ranking/" +
-            this.$store.state.userName +
-            "/" +
-            this.$store.state.currentItem
-        )
-        .set(this.obj);
-      console.log("更新完了");
+      if (this.obj) {
+        console.log("obj is changed");
+        database
+          .ref(
+            "mybest/ranking/" +
+              this.$store.state.userName +
+              "/" +
+              this.$store.state.currentItem
+          )
+          .set(this.obj);
+        console.log("更新完了");
+      }
     },
     getTabName(currentItem) {
       console.log("changed currentItem");
