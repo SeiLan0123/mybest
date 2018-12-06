@@ -1,29 +1,18 @@
 <template>
   <section>
     <div class="addform">
-    <v-flex xs12 sm6 d-flex>
-      <v-select
-      v-model="category"
-      :items="categoryArray"
-      label="カテゴリ"
-      box
-      ></v-select>
-    </v-flex>
-    <v-text-field
-    v-model="item"
-    label="品目"
-    required
-    ></v-text-field>
-    <v-text-field
-    v-model="plc"
-    label="店名"
-    required
-    ></v-text-field>
-    <input type="file" class="file" @change="picUpload">
-    <p><img v-show="uploadFile" style="width: 50vw" :src="uploadFile" class="itemImage"></p>
- <v-btn @click="add()">追加</v-btn>
+      <v-flex xs12 sm6 d-flex>
+        <v-select v-model="category" :items="categoryArray" label="カテゴリ" box></v-select>
+      </v-flex>
+      <v-text-field v-model="item" label="品目" required></v-text-field>
+      <v-text-field v-model="plc" label="店名" required></v-text-field>
+      <input type="file" class="file" @change="picUpload">
+      <p>
+        <img v-show="uploadFile" style="width: 50vw" :src="uploadFile" class="itemImage">
+      </p>
+      <v-btn @click="add()">追加</v-btn>
     </div>
-    </section>
+  </section>
 </template>
 
 
@@ -59,11 +48,21 @@ export default {
   created() {
     this.getLength();
   },
-  methods: {
-    categoryChanged() {
+  /*computed: {
+    getTabName() {
+      console.log("getTabName");
+      return this.$store.state.currentItem;
+    }
+  },*/
+  watch: {
+    category() {
       this.getLength();
-    },
+    }
+  },
+  methods: {
     getLength() {
+      console.log(this.$store.state.userName);
+
       firebase
         .database()
         .ref(
@@ -71,14 +70,25 @@ export default {
         )
         .once("value")
         .then(result => {
+          console.log(result.val());
+
           if (result.val()) {
             obj = result.val();
             addCount = Object.keys(obj).length;
+
+            console.log("category changed");
+          } else {
+            addCount = 0;
           }
+        })
+        .catch(err => {
+          console.log(err);
         });
     },
     //データベースに追加
     add() {
+      console.log("initial add" + addCount);
+
       var metadata = {
         contentType: this.uploadFileData.type
       };
@@ -156,7 +166,7 @@ export default {
           imgPath: this.imgPath || ""
         });
       alert("登録完了");
-      console.log(addCount);
+      console.log("Finish add" + addCount);
       addCount++;
       this.item = "";
       this.plc = "";

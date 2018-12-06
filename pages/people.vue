@@ -1,16 +1,14 @@
 <template>
-<section>
-  <div>
-    <v-flex xs12>
-    <v-text-field
-        hide-details
-        single-line
-        v-model="searchID"
-      ></v-text-field>
-      <v-btn @click="peopleSearch()"><v-icon>search</v-icon>search</v-btn>
-    </v-flex>
-  </div>
-   <ul class="rankingListDiv">
+  <section>
+    <div>
+      <v-flex xs12>
+        <v-text-field hide-details single-line v-model="searchID"></v-text-field>
+        <v-btn @click="peopleSearch()">
+          <v-icon>search</v-icon>search
+        </v-btn>
+      </v-flex>
+    </div>
+    <ul class="rankingListDiv">
       <li v-for="(a, index) in obj " class="rankingList" :key="a.id">
         <v-flex xs12>
           <v-card color="indigo" class="white--text">
@@ -25,12 +23,7 @@
                 </v-card-title>
               </v-flex>
               <v-flex xs5>
-                <v-img
-                  v-show="a.imgPath"
-                  :src="getImgurlb(a.imgPath)"
-                  height="100px"
-                  contain
-                  ></v-img>
+                <v-img v-show="a.imgPath" :src="getImgurlb(a.imgPath)" height="100px" contain></v-img>
               </v-flex>
             </v-layout>
             <v-divider light></v-divider>
@@ -38,7 +31,7 @@
         </v-flex>
       </li>
     </ul>
-</section>
+  </section>
 </template>
 
 <script>
@@ -49,6 +42,19 @@ var imgPathObj;
 export default {
   data() {
     return { searchID: null, obj: [], imgURL: {} };
+  },
+  computed: {
+    getTabName() {
+      console.log("getTabName");
+      return this.$store.state.currentItem;
+    }
+  },
+  watch: {
+    getTabName(currentItem) {
+      if (this.searchID) {
+        this.displayList();
+      }
+    }
   },
   methods: {
     peopleSearch() {
