@@ -93,7 +93,7 @@ export default {
     }
   },
   created() {
-    if (!this.$store.state.user) {
+    if (!this.$store.state.user && this.$route.name != "loadpage") {
       this.$router.push("login");
     } else if (!this.$store.state.userName) {
       console.log("hello ");

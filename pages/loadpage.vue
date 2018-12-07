@@ -15,10 +15,11 @@ export default {
   layout: "empty",
   async mounted() {
     console.log("login check start");
-    await new Promise(resolve => setTimeout(resolve, 500000));
+    //    await new Promise(resolve => setTimeout(resolve, 500));
     let user = await new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged(user => resolve(user));
     });
+
     this.setUser(user);
     if (user) {
       this.$router.push("/");
@@ -31,8 +32,3 @@ export default {
   }
 };
 </script>
-
-<style>
-v-progress-circular {
-}
-</style>
