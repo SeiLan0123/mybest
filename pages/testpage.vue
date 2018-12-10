@@ -1,23 +1,21 @@
 <template>
+  <v-app>
   <section>
     <input type="file" class="file" @change="picUpload">
     <img v-show="uploadFile" :src="uploadFile" class="itemImage">
     <img v-show="imgPath" :src="imgPath" class="itemImage">
-    <v-progress-circular :size="70" :width="7" color="purple" indeterminate>afeawffa</v-progress-circular>
+    <v-progress-circular :size="70" :width="7" color="purple" indeterminate></v-progress-circular>
   </section>
+  </v-app>
 </template>
 
 <script>
 import firebase from "firebase";
 import axios from "axios";
 import "vuetify/dist/vuetify.min.css";
-import { VProgressCircular } from "vuetify";
 
 export default {
   layout: "empty",
-  components: {
-    VProgressCircular
-  },
   data() {
     return {
       uploadFile: "",
