@@ -22,6 +22,7 @@ module.exports = {
   },
   plugins: ['~plugins/vuetify.js'],
 
+
   /*
   ** Customize the progress bar color
   */
