@@ -83,7 +83,7 @@ export default {
   },
   created() {
     if (!this.$store.state.user) {
-      this.$router.push("login");
+      this.$router.push("/login");
     } else if (this.$store.state.userName) {
       this.$router.push("/");
     }

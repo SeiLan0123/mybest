@@ -80,7 +80,7 @@ export default {
     },
     logoutBtn() {
       this.logout();
-      this.$router.push("login");
+      this.$router.push("/login");
     }
   },
   watch: {
@@ -94,7 +94,7 @@ export default {
   },
   created() {
     if (!this.$store.state.user && this.$route.name != "loadpage") {
-      this.$router.push("login");
+      this.$router.push("/login");
     } else if (!this.$store.state.userName) {
       console.log("hello ");
 
@@ -110,10 +110,10 @@ export default {
               this.setUserName(result.val());
             } else {
               console.log("Unknown username");
-              this.$router.push("username");
+              this.$router.push("/username");
             }
           } else {
-            this.$router.push("username");
+            this.$router.push("/username");
           }
         })
         .catch(err => {

@@ -56,10 +56,10 @@ export default {
               this.$router.push("/");
             } else {
               console.log("Unknown username");
-              this.$router.push("username");
+              this.$router.push("/username");
             }
           } else {
-            this.$router.push("username");
+            this.$router.push("/username");
           }
         })
         .catch(err => {
