@@ -53,6 +53,6 @@ module.exports = {
   //   middleware: 'authenticated'
   // }
   serverMiddleware: [
-    '~/apis/index.js'
+    '~/apies/index.js'
   ]
 }
